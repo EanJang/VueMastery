@@ -6,6 +6,7 @@ const app = Vue.createApp({
             image: './assets/images/socks_green.jpg',
             inventory: 8,
             inStock: true,
+            onSale: true,
             details: ['50% cotton', '30% wool', '20% polyester'],
             variants: [
                 { id: 0001, color: 'green', colorCode: '#55DC68', image: './assets/images/socks_green.jpg'},
@@ -27,7 +28,13 @@ const app = Vue.createApp({
     },
     computed: {
         title() {
-            return this.brand + ' ' + this.product
+            return this.brand + ' ' + this.product;
+        },
+        sale() {
+            if (this.onSale) {
+                return this.brand + ' ' + this.product + ' is on sale.';
+            }
+            return '';
         }
     }
 })
