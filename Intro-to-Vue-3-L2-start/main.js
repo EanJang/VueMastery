@@ -8,7 +8,13 @@ const app = Vue.createApp({
             variants: [
                 { id: 0001, color: 'green'},
                 { id: 0002, color: 'blue'}
-            ]
+            ],
+            cart: 0
         }
-    }
+    },
+    methods: {
+        addToCart() {
+            this.cart++;
+        }
+    },
 })
