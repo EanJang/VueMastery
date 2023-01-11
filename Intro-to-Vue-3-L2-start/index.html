@@ -18,7 +18,7 @@
         <div class="product-container">
           <div class="product-image">
             <!-- image goes here -->
-            <img :src="image">
+            <img :class="{ 'out-of-stock-img' : !inStock}" :src="image">
           </div>
           <div class="product-info">
             <h1>{{ product }}</h1>
@@ -35,7 +35,12 @@
               class="color-circle"
               :style="{backgroundColor: variant.colorCode}"
             ></div>
-            <button class="button" @click="addToCart">Add to Cart</button>
+            <button 
+              class="button" 
+              :class="{ disabledButton: !inStock }"
+              :disabled="!inStock"
+              @click="addToCart"
+            >Add to Cart</button>
             <button class="button" @click="removeFromCart">Remove Item</button>
           </div>
         </div>
