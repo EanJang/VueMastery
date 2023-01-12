@@ -36,9 +36,12 @@ app.component('product-display', {
             :disabled="!inStock"
             @click="addToCart"
         >Add to Cart</button>
-        <button class="button" @click="removeFromCart">Remove Item</button>
+        <button class="button" 
+            @click="removeFromCart">Remove Item</button>
         </div>
         </div>
+        <review-list v-if="reviews.length" :reviews="reviews"></review-list>
+        <review-form @review-submitted="addReview"></review-form>
     </div>`,
     data: function() {
         return {
@@ -50,7 +53,8 @@ app.component('product-display', {
             variants: [
                 { id: 0001, color: 'green', colorCode: '#55DC68', image: './assets/images/socks_green.jpg', quantity: 18},
                 { id: 0002, color: 'blue', colorCode: '#2E589C',  image: './assets/images/socks_blue.jpg', quantity: 0}
-            ]
+            ],
+            reviews: []
         }
     },
     methods: {
@@ -62,6 +66,9 @@ app.component('product-display', {
         },
         updateVariant(index) {
             this.selectedVariant = index;
+        },
+        addReview(review) {
+            this.reviews.push(review);
         }
     },
     computed: {
