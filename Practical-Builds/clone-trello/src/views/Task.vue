@@ -1,11 +1,19 @@
 <template>
   <div class="task-view">
-
+    <div>{{ task.name }}</div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
+  computed: {
+    ...mapGetters(['getTask']),
+    task () {
+      return this.getTask(this.$route.params.id)
+    }
+  }
 }
 </script>
 
