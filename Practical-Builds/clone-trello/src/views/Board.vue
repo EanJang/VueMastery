@@ -31,6 +31,7 @@
       </div>
     </div>
     <div
+      class="task-bg"
       v-if="isTaskOpen"
     >
       <router-view />
