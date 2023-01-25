@@ -2,7 +2,15 @@
   <div class="task-view">
     <div
       class="flex flex-col flex-grow items-start justify-between px-4"
-    >{{ task.name }}</div>
+    >
+      {{ task.name }}
+      <textarea
+        class="relative bg-transparent px-2 mt-2 border border-none leading-normal"
+        placeholder="Enter your task description"
+        :value="task.description"
+        @change="updateTaskProperty($event, 'description')"
+      />
+    </div>
   </div>
 </template>
 
@@ -14,6 +22,15 @@ export default {
     ...mapGetters(['getTask']),
     task () {
       return this.getTask(this.$route.params.id)
+    }
+  },
+  methods: {
+    updateTaskProperty (e, key) {
+      this.$store.commit('UPDATE_TASK', {
+        task: this.task,
+        key,
+        value: e.target.value
+      })
     }
   }
 }
