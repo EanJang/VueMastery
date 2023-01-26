@@ -16,6 +16,8 @@
             v-for="(task, $taskIndex) of column.tasks"
             :key="$taskIndex"
             @click="goToTask(task)"
+            draggable
+            @dragstart="pickupTask($event, $taskIndex, $columnIndex)"
           >
             <span class="w-full flex-no-shrink font-bold">
               {{ task.name }}
@@ -63,6 +65,12 @@ export default {
     createTask (e, tasks) {
       this.$store.commit('CREATE_TASK', { tasks, name: e.target.value })
       e.target.value = ''
+    },
+    pickupTask (e, taskIndex, fromColumnIndex) {
+      e.dataTransfer.effectAllowed = 'move'
+      e.dataTransfer.dropEffect = 'move'
+      e.dataTransfer.setData('task-index', taskIndex)
+      e.dataTransfer.setData('from-column-index', fromColumnIndex)
     },
     close () {
       this.$router.push({ name: 'board' })
