@@ -22,6 +22,9 @@
             @click="goToTask(task)"
             draggable
             @dragstart="pickupTask($event, $taskIndex, $columnIndex)"
+            @dragover.prevent
+            @dragenter.prevent
+            @drag.stop="moveTaskOrColumn($event, column.tasks, $columnIndex, $taskIndex)"
           >
             <span class="w-full flex-no-shrink font-bold">
               {{ task.name }}
