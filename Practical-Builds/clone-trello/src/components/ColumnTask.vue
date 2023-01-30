@@ -1,14 +1,16 @@
-/* eslint-disable */
 <template>
-    <div
-        class="task"
-        @click="goToTask(task)"
-        draggable
-        @dragstart="pickupTask($event, taskIndex, columnIndex)"
-        @dragover.prevent
-        @dragenter.prevent
-        @drag.stop="moveTaskOrColumn($event, column.tasks, columnIndex, taskIndex)"
+    <AppDrop
+        @drop="moveTaskOrColumn"
     >
+        <AppDrag
+        class="task"
+        :transferData="{
+            type: 'task',
+            fromColumnIndex: columnIndex,
+            fromTaskIndex: taskIndex
+        }"
+        @click.native="goToTask(task)"
+        >
         <span class="w-full flex-no-shrink font-bold">
             {{ task.name }}
         </span>
@@ -18,74 +20,33 @@
         >
             {{ task.description }}
         </p>
-    </div>
+        </AppDrag>
+    </AppDrop>
 </template>
 
 <script>
+import movingTasksAndColumnsMixin from '@/mixins/movingTasksAndColumnsMixin'
+import AppDrag from './AppDrag'
+import AppDrop from './AppDrop'
 export default {
+    components: { AppDrag, AppDrop },
+    mixins: [movingTasksAndColumnsMixin],
     props: {
         task: {
-            type: Object,
-            required: true
+        type: Object,
+        required: true
         },
         taskIndex: {
-            type: Number,
-            required: true
-        },
-        column: {
-            type: Object,
-            required: true
-        },
-        columnIndex: {
-            type: Number,
-            required: true
-        },
-        board: {
-            type: Object,
-            required: true
+        type: Number,
+        required: true
         }
     },
     methods: {
         goToTask (task) {
-            this.$router.push({ name: 'task', params: { id: task.id } })
-        },
-        pickupTask (e, taskIndex, fromColumnIndex) {
-            e.dataTransfer.effectAllowed = 'move'
-            e.dataTransfer.dropEffect = 'move'
-            e.dataTransfer.setData('from-task-index', taskIndex)
-            e.dataTransfer.setData('from-column-index', fromColumnIndex)
-            e.dataTransfer.setData('type', 'task')
-        },
-        moveTaskOrColumn (e, toTasks, toColumnIndex, toTaskIndex) {
-            const type = e.dataTransfer.getData('type')
-            if (type === 'task') {
-                this.moveTask(e, toTasks)
-            } else {
-                this.moveColumn(e, toColumnIndex)
-            }
-        },
-        moveTask (e, toTasks, toTaskIndex) {
-            const fromColumnIndex = e.dataTransfer.getData('from-column-index')
-            const fromTasks = this.board.columns[fromColumnIndex].tasks
-            const fromTaskIndex = e.dataTransfer.getData('from-task-index')
-
-            this.$store.commit('MOVE_TASK', {
-                fromTasks,
-                fromTaskIndex,
-                toTasks,
-                toTaskIndex
-            })
-        },
-        moveColumn (e, toColumnIndex) {
-            const fromColumnIndex = e.dataTransfer.getData('from-column-index')
-            this.$store.commit('MOVE_COLUMN', {
-                fromColumnIndex,
-                toColumnIndex
-            })
+        this.$router.push({ name: 'task', params: { id: task.id } })
         }
     }
 }
-
 </script>
 
 <style lang="css">
