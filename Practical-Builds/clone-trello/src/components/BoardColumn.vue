@@ -33,51 +33,12 @@
 
 <script>
 import ColumnTask from './ColumnTask'
+import movingTasksAndColumnsMixin from '@/mixins/movingTasksAndColumnsMixin'
 
 export default {
     components: { ColumnTask },
-    props: {
-        column: {
-            type: Object,
-            required: true
-        },
-        columnIndex: {
-            type: Number,
-            required: true
-        },
-        board: {
-            type: Object,
-            required: true
-        }
-    },
+    mixins: [movingTasksAndColumnsMixin],
     methods: {
-        moveTaskOrColumn (e, toTasks, toColumnIndex, toTaskIndex) {
-            const type = e.dataTransfer.getData('type')
-            if (type === 'task') {
-                this.moveTask(e, toTasks)
-            } else {
-                this.moveColumn(e, toColumnIndex)
-            }
-        },
-        moveTask (e, toTasks, toTaskIndex) {
-            const fromColumnIndex = e.dataTransfer.getData('from-column-index')
-            const fromTasks = this.board.columns[fromColumnIndex].tasks
-            const fromTaskIndex = e.dataTransfer.getData('from-task-index')
-
-            this.$store.commit('MOVE_TASK', {
-                fromTasks,
-                fromTaskIndex,
-                toTasks,
-                toTaskIndex
-            })
-        },
-        moveColumn (e, toColumnIndex) {
-            const fromColumnIndex = e.dataTransfer.getData('from-column-index')
-            this.$store.commit('MOVE_COLUMN', {
-                fromColumnIndex,
-                toColumnIndex
-            })
-        },
         pickupColumn (e, fromColumnIndex) {
             e.dataTransfer.effectAllowed = 'move'
             e.dataTransfer.dropEffect = 'move'
@@ -87,7 +48,7 @@ export default {
         createTask (e, tasks) {
             this.$store.commit('CREATE_TASK', { tasks, name: e.target.value })
             e.target.value = ''
-        },
+        }
     }
 }
 </script>
