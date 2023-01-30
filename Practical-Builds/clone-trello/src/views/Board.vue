@@ -97,6 +97,7 @@ export default {
       this.$store.commit('CREATE_COLUMN', {
         name: this.newColumnName
       })
+      this.newColumnName = ''
     },
     pickupColumn (e, fromColumnIndex) {
       e.dataTransfer.effectAllowed = 'move'
